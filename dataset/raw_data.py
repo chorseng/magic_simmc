@@ -20,7 +20,7 @@ from util import load_pkl, save_pkl
 # Custom types.
 CommonData = namedtuple('CommonData',
                         ['dialog_vocab', 'glove',
-                         'image_url_id', 'image_paths'])
+                         'obj_id', 'obj_paths'])
 Dialog = List[Utterance]
 
 
@@ -34,17 +34,17 @@ class RawData():
     Common data:
         * dialog_vocab
         * glove
-        * image_url_id
-        * image_paths
+        * obj_id
+        * obj_paths
     Mode specific data:
         * {train, valid, test}_dialogs
     Attributes:
         mode (int): Mode (TRAIN_MODE, VALID_MODE, TEST_MODE).
         dialog_vocab (Dict[str, int]): Dialog vocabulary, word -> index.
         glove (List[Optional[List[float]]]): GloVe, index -> float vector.
-        image_url_id (Dict[str, int]): Image url to index of `image_paths`.
-                                       0 for unknown url.
-        image_paths (List[str]): Image paths. image_paths[0] is None.
+        obj_id (Dict[str, int]): Object ID to index of `obj`.
+                                       0 for unknown object.
+        obj_paths (List[str]): Object paths. obj_paths[0] is None.
         train_dialogs (List[Dialog]): Train dialogs, if is train mode.
         valid_dialogs (List[Dialog]): Valid dialogs, if is valid mode.
         test_dialogs (List[Dialog]): Test dialogs, if is test mode.
@@ -59,8 +59,8 @@ class RawData():
 
         self.dialog_vocab: Dict[str, int] = None
         self.glove: List[Optional[List[float]]] = None
-        self.image_url_id: Dict[str, int] = None
-        self.image_paths: List[str] = None
+        self.obj_id: Dict[str, int] = None
+        self.obj_paths: List[str] = None
 
         # Dynamic attributes.
         if self.mode & TRAIN_MODE:
@@ -81,8 +81,8 @@ class RawData():
             common_data = RawData._get_common_data()
             self.dialog_vocab: Dict[str, int] = common_data.dialog_vocab
             self.glove: List[Optional[List[float]]] = common_data.glove
-            self.image_url_id: Dict[str, int] = common_data.image_url_id
-            self.image_paths: List[str] = common_data.image_paths
+            self.obj_id: Dict[str, int] = common_data.obj_id
+            self.obj_paths: List[str] = common_data.obj_paths
 
             # Save common data to a .pkl file.
             save_pkl(common_data, 'common_data',
@@ -95,7 +95,7 @@ class RawData():
             if not has_data_pkl:
                 self.train_dialogs = RawData._get_dialogs(TRAIN_MODE,
                                                           self.dialog_vocab,
-                                                          self.image_url_id)
+                                                          self.obj_id)
                 # Save common data to a .pkl file.
                 save_pkl(self.train_dialogs, 'train_dialogs',
                          DatasetConfig.train_raw_data_file)
@@ -106,7 +106,7 @@ class RawData():
             if not has_data_pkl:
                 self.valid_dialogs = RawData._get_dialogs(VALID_MODE,
                                                           self.dialog_vocab,
-                                                          self.image_url_id)
+                                                          self.obj_id)
                 # Save common data to a .pkl file.
                 save_pkl(self.valid_dialogs, 'valid_dialogs',
                          DatasetConfig.valid_raw_data_file)
@@ -117,7 +117,7 @@ class RawData():
             if not has_data_pkl:
                 self.test_dialogs = RawData._get_dialogs(TEST_MODE,
                                                          self.dialog_vocab,
-                                                         self.image_url_id)
+                                                         self.obj_id)
                 # Save common data to a .pkl file.
                 save_pkl(self.test_dialogs, 'test_dialogs',
                          DatasetConfig.test_raw_data_file)
@@ -185,8 +185,8 @@ class RawData():
                 DatasetConfig.common_raw_data_file)
             self.dialog_vocab = common_data.dialog_vocab
             self.glove = common_data.glove
-            self.image_url_id = common_data.image_url_id
-            self.image_paths = common_data.image_paths
+            self.obj_id = common_data.obj_url_id
+            self.obj_paths = common_data.obj_paths
 
         # Specific mode data
         if self.mode & TRAIN_MODE and isfile(DatasetConfig.train_raw_data_file):
@@ -208,10 +208,10 @@ class RawData():
 
         dialog_vocab = RawData._get_dialog_vocab()
         glove = RawData._get_glove(dialog_vocab)
-        image_url_id, image_paths = RawData._get_images()
+        obj_id, obj_paths = RawData._get_images()
         return CommonData(dialog_vocab=dialog_vocab, glove=glove,
-                          image_url_id=image_url_id,
-                          image_paths=image_paths)
+                          obj_id=obj_id,
+                          obj_paths=obj_paths)
 
     @staticmethod
     def _get_dialog_vocab() -> Dict[str, int]:
@@ -259,17 +259,17 @@ class RawData():
 
     @staticmethod
     def _process_dialog_dir(dialog_dir: str, vocab: Dict[str, int] = None,
-                            image_url_id: Dict[str, int] = None,
+                            obj_id: Dict[str, int] = None,
                             word_freq_cnt: Counter = None) -> List[Dialog]:
         """Process dialog directory.
         Args:
             dialog_dir (str): Dialog directory.
             vocab (Dict[str, int], optional): Vocabulary.
-            image_url_id (Dict[str, int], optional): Image URL to index.
+            obj_id (Dict[str, int], optional): Obj_ID to index.
             word_freq_cnt (Counter, optional): Word frequency counter.
         Note:
             * (word_freq_cnt is not None) or (vocab is not None and
-              image_url_id is not None) == True
+              obj_id is not None) == True
             * word_freq_cnt will be updated if it's not None
         Returns:
             List[Dialog]: Extracted dialogs. Empty list if
@@ -278,7 +278,7 @@ class RawData():
 
         # Check arguments.
         assert (word_freq_cnt is not None) or (vocab is not None and
-                                               image_url_id is not None)
+                                               obj_id is not None)
 
         get_vocab: bool = word_freq_cnt is not None
 
@@ -313,13 +313,13 @@ class RawData():
                         utter_coref = dialog_json['dialogue_data'][dial_idx]['dialogue_coref_map']
                         if not get_vocab:
                             user_utter = RawData._get_utter_from_dict(vocab,
-                                                                 image_url_id,
+                                                                 obj_id,
                                                                  utter_dict,
                                                                  utter_coref,
                                                                  speaker = 'user')
                             dialog.append(user_utter)
                             sys_utter = RawData._get_utter_from_dict(vocab,
-                                                                 image_url_id,
+                                                                 obj_id,
                                                                  utter_dict,
                                                                  utter_coref,
                                                                  speaker = 'sys')
@@ -342,14 +342,14 @@ class RawData():
 
     @staticmethod
     def _get_utter_from_dict(vocab: Dict[str, int],
-                             image_url_id: Dict[str, int],
+                             obj_id: Dict[str, int],
                              utter_dict: dict,
                              utter_coref: dict,
                              speaker: str) -> Utterance:
         """Extract Utterance object from JSON dict.
         Args:
             vocab (Dict[str, int]): Vocabulary.
-            image_url_id (Dict[str, int]): Image URL to index.
+            obj_id (Dict[str, int]): Obj_ID to index.
             utter_dict (dict): JSON dict.
             utter_coref (dict): JSON dict.
         Returns:
@@ -364,18 +364,18 @@ class RawData():
             _speaker: str = 'user'
             _utter_type: str = (ast.literal_eval(utter_dict.get('system_transcript_annotated')))[0]['intent'].split(':')[0]
             _text: str = utter_dict['transcript']
-        _pos_images: List[str] = list(utter_coref.keys())
-        _neg_images: List[str] = []
+        _pos_obj: List[str] = list(utter_coref.keys())
+        _neg_obj: List[str] = []
 
         # Some attributes may be empty.
         if _text is None:
             _text = ""
         if _utter_type is None:
             _utter_type = ""
-        if _pos_images is None:
-            _pos_images = []
-        if _neg_images is None:
-            _neg_images = []
+        if _pos_obj is None:
+            _pos_obj = []
+        if _neg_obj is None:
+            _neg_obj = []
 
         # Convert speaker into an integer.
         speaker: int = -1
@@ -398,50 +398,50 @@ class RawData():
         # Images
         #pos_images: List[int] = [image_url_id.get(img, 0)
         #                         for img in _pos_images]
-        pos_images: List[str] = _pos_images
-        neg_images: List[int] = [image_url_id.get(img, 0)
-                                 for img in _neg_images]
+        pos_obj: List[str] = _pos_obj
+        neg_obj: List[int] = [obj_id.get(img, 0)
+                                 for img in _neg_obj]
 
-        utter = Utterance(speaker, utter_type, text, pos_images, neg_images)
+        utter = Utterance(speaker, utter_type, text, pos_obj, neg_obj)
         return utter
 
     @staticmethod
     def _get_images() -> Tuple[Dict[str, int], List[str]]:
-        """Get images (URL and filenames of local images mapping).
+        """Get objects (ID and filenames of local objects mapping).
         URL -> Path => URL -> index & index -> Path
         Returns:
-            Dict[str, int]: Image URL to index.
-            List[str]: Index to the filename of the local image.
+            Dict[str, int]: Object_ID to index.
+            List[str]: Index to the filename of the local object.
         """
 
         # Get URL to filename mapping dict.
         with open(DatasetConfig.url2img, 'r') as file:
-            url_image_pairs: List[List[str]] = [line.strip().split(' ')
+            obj_pairs: List[List[str]] = [line.strip().split(' ')
                                                 for line in file.readlines()]
-        url_image_pairs: List[Tuple[str, str]] = [(p[0], p[1])
-                                                  for p in url_image_pairs]
-        url2img: Dict[str, str] = dict(url_image_pairs)
+        obj_pairs: List[Tuple[str, str]] = [(p[0], p[1])
+                                                  for p in obj_pairs]
+        url2img: Dict[str, str] = dict(obj_pairs)
 
         # Divided it into two steps.
         # URL -> Path => URL -> index & index -> Pathtrain
         # Element of index 0 should be empty image.
-        image_url_id: Dict[str, int] = {'': 0}
-        image_paths: List[str] = ['']
+        obj_id: Dict[str, int] = {'': 0}
+        obj_paths: List[str] = ['']
 
         for url, img in url2img.items():
-            image_url_id[url] = len(image_url_id)
-            image_paths.append(img)
-        return image_url_id, image_paths
+            obj_id[url] = len(obj_id)
+            obj_paths.append(img)
+        return obj_id, obj_paths
 
     @staticmethod
     def _get_dialogs(mode: int,
                      vocab: Dict[str, int],
-                     image_url_id: Dict[str, int]) -> List[Dialog]:
+                     obj_id: Dict[str, int]) -> List[Dialog]:
         """Get mode specific dialogs.
         Args:
             mode (int): TRAIN_MODE / VALID_MODE / TEST_MODE.
             vocab (Dict[str, int]): Vocabulary.
-            image_url_id (Dict[str, int]): Image URL to index.
+            obj_id (Dict[str, int]): Obj_ID to index.
         Returns:
             List[Dialog]: Extracted dialogs of specific mode.
         Raises:
@@ -451,11 +451,11 @@ class RawData():
 
         if mode == TRAIN_MODE:
             return RawData._process_dialog_dir(
-                DatasetConfig.train_dialog_data_directory, vocab, image_url_id)
+                DatasetConfig.train_dialog_data_directory, vocab, obj_id)
         if mode == VALID_MODE:
             return RawData._process_dialog_dir(
-                DatasetConfig.valid_dialog_data_directory, vocab, image_url_id)
+                DatasetConfig.valid_dialog_data_directory, vocab, obj_id)
         if mode == TEST_MODE:
             return RawData._process_dialog_dir(
-                DatasetConfig.test_dialog_data_directory, vocab, image_url_id)
+                DatasetConfig.test_dialog_data_directory, vocab, obj_id)
         raise ValueError('Illegal mode.')
