@@ -82,7 +82,7 @@ class RawData():
             self.dialog_vocab: Dict[str, int] = common_data.dialog_vocab
             self.glove: List[Optional[List[float]]] = common_data.glove
             self.obj_id: Dict[str, int] = common_data.obj_id
-            self.obj_paths: List[str] = common_data.obj_paths
+            #self.obj_paths: List[str] = common_data.obj_paths
 
             # Save common data to a .pkl file.
             save_pkl(common_data, 'common_data',
@@ -185,8 +185,8 @@ class RawData():
                 DatasetConfig.common_raw_data_file)
             self.dialog_vocab = common_data.dialog_vocab
             self.glove = common_data.glove
-            self.obj_id = common_data.obj_url_id
-            self.obj_paths = common_data.obj_paths
+            self.obj_id = common_data.obj_id
+            #self.obj_paths = common_data.obj_paths
 
         # Specific mode data
         if self.mode & TRAIN_MODE and isfile(DatasetConfig.train_raw_data_file):
@@ -208,10 +208,11 @@ class RawData():
 
         dialog_vocab = RawData._get_dialog_vocab()
         glove = RawData._get_glove(dialog_vocab)
-        obj_id, obj_paths = RawData._get_images()
+        obj_id = RawData._get_objs()
+        #obj_id, obj_paths = RawData._get_objs()
         return CommonData(dialog_vocab=dialog_vocab, glove=glove,
-                          obj_id=obj_id,
-                          obj_paths=obj_paths)
+                          obj_id=obj_id) #,
+                          #obj_paths=obj_paths)
 
     @staticmethod
     def _get_dialog_vocab() -> Dict[str, int]:
@@ -304,12 +305,16 @@ class RawData():
                     continue
                     
                 for dial_idx in range(len(dialog_json['dialogue_data'])):
+                  
+                    Print current progress.
+                    if (dial_idx + 1) % DIALOG_PROC_PRINT_FREQ == 0:
+                        print('Processing dialog directory: {}/{}'.format(dial_idx + 1, len(dialog_json['dialogue_data']))
+                  
                     # Extract useful information
                     dialog = []
                     dial = dialog_json['dialogue_data'][dial_idx]['dialogue']
                     for dial_idx2 in range(len(dial)):
-                        #dial_data = dial[dial_idx2]
-                        utter_dict = dial[dial_idx2]#dial_data['dialogue']
+                        utter_dict = dial[dial_idx2]
                         utter_coref = dialog_json['dialogue_data'][dial_idx]['dialogue_coref_map']
                         if not get_vocab:
                             user_utter = RawData._get_utter_from_dict(vocab,
@@ -365,7 +370,7 @@ class RawData():
             _utter_type: str = (ast.literal_eval(utter_dict.get('system_transcript_annotated')))[0]['intent'].split(':')[0]
             _text: str = utter_dict['transcript']
         _pos_obj: List[str] = list(utter_coref.keys())
-        _neg_obj: List[str] = []
+        #_neg_obj: List[str] = []
 
         # Some attributes may be empty.
         if _text is None:
@@ -374,8 +379,8 @@ class RawData():
             _utter_type = ""
         if _pos_obj is None:
             _pos_obj = []
-        if _neg_obj is None:
-            _neg_obj = []
+        #if _neg_obj is None:
+        #    _neg_obj = []
 
         # Convert speaker into an integer.
         speaker: int = -1
@@ -396,17 +401,15 @@ class RawData():
         text: List[int] = [vocab.get(word.lower(), UNK_ID) for word in words]
 
         # Images
-        #pos_images: List[int] = [image_url_id.get(img, 0)
-        #                         for img in _pos_images]
         pos_obj: List[str] = _pos_obj
-        neg_obj: List[int] = [obj_id.get(img, 0)
-                                 for img in _neg_obj]
+        #neg_obj: List[int] = [obj_id.get(img, 0)
+        #                         for img in _neg_obj]
 
-        utter = Utterance(speaker, utter_type, text, pos_obj, neg_obj)
+        utter = Utterance(speaker, utter_type, text, pos_obj) #, neg_obj)
         return utter
 
     @staticmethod
-    def _get_images() -> Tuple[Dict[str, int], List[str]]:
+    def _get_objs() -> Tuple[Dict[str, int], List[str]]:
         """Get objects (ID and filenames of local objects mapping).
         URL -> Path => URL -> index & index -> Path
         Returns:
@@ -415,23 +418,24 @@ class RawData():
         """
 
         # Get URL to filename mapping dict.
-        with open(DatasetConfig.url2img, 'r') as file:
-            obj_pairs: List[List[str]] = [line.strip().split(' ')
-                                                for line in file.readlines()]
-        obj_pairs: List[Tuple[str, str]] = [(p[0], p[1])
-                                                  for p in obj_pairs]
-        url2img: Dict[str, str] = dict(obj_pairs)
+        with open(DatasetConfig.fashion_meta, 'r') as file:
+            #obj_pairs: List[List[str]] = [line.strip().split(' ')
+            #                                    for line in file.readlines()]
+            objs: List[str] = list(file.keys())
+        #obj_pairs: List[Tuple[str, str]] = [(p[0], p[1])
+        #                                          for p in obj_pairs]
+        #url2img: Dict[str, str] = dict(obj_pairs)
 
         # Divided it into two steps.
         # URL -> Path => URL -> index & index -> Pathtrain
         # Element of index 0 should be empty image.
         obj_id: Dict[str, int] = {'': 0}
-        obj_paths: List[str] = ['']
+        #obj_paths: List[str] = ['']
 
-        for url, img in url2img.items():
-            obj_id[url] = len(obj_id)
-            obj_paths.append(img)
-        return obj_id, obj_paths
+        for product in objs.items():
+            obj_id[product] = len(obj_id)
+            #obj_paths.append(img)
+        return obj_id #, obj_paths
 
     @staticmethod
     def _get_dialogs(mode: int,
