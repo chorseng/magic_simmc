@@ -13,6 +13,7 @@ class DatasetConfig():
     #glove_file = join(data_directory, 'glove.txt')
     glove_file = '/home/chorseng/data/glove.txt'
     url2img = '/home/chorseng/data/url2img.txt'
+    fashion_meta = '/home/chorseng/fashion_data/knowledge/products/fashion_metadata.json'
 
     dialog_directory = join(data_directory, 'dialogs/')
     train_dialog_data_directory = join(dialog_directory, 'train/')
