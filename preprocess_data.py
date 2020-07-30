@@ -112,11 +112,11 @@ def main():
     # Generate tidy data file.
     for task, modes in parse_result.items():
         for mode in modes:
-            if TASK_ID[task] == KNOWLEDGE_TASK:
-                for subtask in KNOWLEDGE_SUBTASKS:
-                    generate_tidy_data_file(raw_data, subtask, MODE_ID[mode])
-            else:
-                generate_tidy_data_file(raw_data, TASK_ID[task], MODE_ID[mode])
+            #if TASK_ID[task] == KNOWLEDGE_TASK:                
+            #    generate_tidy_data_file(raw_data, subtask, MODE_ID[mode])
+            #else:
+                #generate_tidy_data_file(raw_data, TASK_ID[task], MODE_ID[mode])
+            generate_tidy_data_file(raw_data, TASK_ID[task], MODE_ID[mode])
 
 
 if __name__ == '__main__':
