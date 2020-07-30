@@ -11,7 +11,7 @@ from typing import List, Tuple, Dict, Set
 
 from constant import MODE_STR, NONE_MODE, MODE_ID
 from constant import TASK_STR, TASK_ID
-from constant import KNOWLEDGE_TASK, KNOWLEDGE_SUBTASKS
+from constant import KNOWLEDGE_TASK
 from dataset import RawData
 from dataset.tidy_data import generate_tidy_data_file
 
