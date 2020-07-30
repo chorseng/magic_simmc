@@ -369,7 +369,18 @@ class RawData():
             _speaker: str = 'user'
             _utter_type: str = (ast.literal_eval(utter_dict.get('system_transcript_annotated')))[0]['intent'].split(':')[0]
             _text: str = utter_dict['transcript']
-        _pos_obj: List[str] = list(utter_coref.keys())
+        object_list = []
+        for state in utter_dict.get('belief_state'):
+            for sub_state in state['slots']:
+                for sub_sub_state in sub_state:
+                    if "OBJECT" in sub_sub_state:
+                        object_list.append(int(sub_sub_state[-1]))
+        _pos_obj: List[str] = [] 
+        for product in object_list:
+             for key in utter_dict:
+                 if utter_dict[key] == product:                
+                     _pos_obj.append(key) 
+        #_pos_obj: List[str] = list(utter_coref.keys())
         #_neg_obj: List[str] = []
 
         # Some attributes may be empty.
