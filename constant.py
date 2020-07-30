@@ -10,21 +10,14 @@ NONE_TASK = 0
 INTENTION_TASK = 1 << 0
 TEXT_TASK = 1 << 1
 RECOMMEND_TASK = 1 << 2
-KNOWLEDGE_STYLETIP_SUBTASK = 1 << 3
-KNOWLEDGE_ATTRIBUTE_SUBTASK = 1 << 4
-KNOWLEDGE_CELEBRITY_SUBTASK = 1 << 5
-KNOWLEDGE_SUBTASKS = [KNOWLEDGE_STYLETIP_SUBTASK,
-                      KNOWLEDGE_ATTRIBUTE_SUBTASK,
-                      KNOWLEDGE_CELEBRITY_SUBTASK]
-KNOWLEDGE_TASK = reduce(or_, KNOWLEDGE_SUBTASKS)
+KNOWLEDGE_TASK = 1 << 3
+
 
 TASK_STR = {
     INTENTION_TASK: 'intention',
     TEXT_TASK: 'text',
     RECOMMEND_TASK: 'recommend',
-    KNOWLEDGE_STYLETIP_SUBTASK: 'knowledge_styletip',
-    KNOWLEDGE_ATTRIBUTE_SUBTASK: 'knowledge_attribute',
-    KNOWLEDGE_CELEBRITY_SUBTASK: 'knowledge_celebrity'
+    KNOWLEDGE_TASK: 'knowledge',
 }
 
 TASK_ID = {task_str: task_id for task_id, task_str in TASK_STR.items()}
