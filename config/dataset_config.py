@@ -22,15 +22,11 @@ class DatasetConfig():
     knowledge_data_directory = join(data_directory, 'knowledge/')
     product_data_directory = join(knowledge_data_directory,
                                   'products_format/')
-
-    styletips_data_file = join(knowledge_data_directory,
-                               'styletip/styletips_synset.txt')
-    celebrity_data_file = join(knowledge_data_directory,
-                               'celebrity/celebrity_distribution.json')
-
+    
+    # Can use if we download images
     image_data_directory = join(data_directory, 'images/')
 
-    dump_dir = '/home/chorseng/fashion_data/dump_dir'
+    dump_dir = '/home/chorseng/magic_simmc_dev/dump_dir'
     common_raw_data_file = join(dump_dir, 'common_raw_data.pkl')
     knowledge_data_file = join(dump_dir, 'knowledge_data.pkl')
 
@@ -54,26 +50,12 @@ class DatasetConfig():
     recommend_test_dialog_file = join(dump_dir,
                                       'recommend_test_dialog_file.pkl')
 
-    knowledge_styletip_train_dialog_file = join(
-        dump_dir, 'knowledge_styletip_train_dialog_file.pkl')
-    knowledge_styletip_valid_dialog_file = join(
-        dump_dir, 'knowledge_styletip_valid_dialog_file.pkl')
-    knowledge_styletip_test_dialog_file = join(
-        dump_dir, 'knowledge_styletip_test_dialog_file.pkl')
-
-    knowledge_attribute_train_dialog_file = join(
-        dump_dir, 'knowledge_attribute_train_dialog_file.pkl')
-    knowledge_attribute_valid_dialog_file = join(
-        dump_dir, 'knowledge_attribute_valid_dialog_file.pkl')
-    knowledge_attribute_test_dialog_file = join(
-        dump_dir, 'knowledge_attribute_test_dialog_file.pkl')
-
-    knowledge_celebrity_train_dialog_file = join(
-        dump_dir, 'knowledge_celebrity_train_dialog_file.pkl')
-    knowledge_celebrity_valid_dialog_file = join(
-        dump_dir, 'knowledge_celebrity_valid_dialog_file.pkl')
-    knowledge_celebrity_test_dialog_file = join(
-        dump_dir, 'knowledge_celebrity_test_dialog_file.pkl')
+    knowledge_train_dialog_file = join(
+        dump_dir, 'knowledge_train_dialog_file.pkl')
+    knowledge_valid_dialog_file = join(
+        dump_dir, 'knowledge_valid_dialog_file.pkl')
+    knowledge_test_dialog_file = join(
+        dump_dir, 'knowledge_test_dialog_file.pkl')
 
     @staticmethod
     def get_dialog_filename(task: int, mode: int) -> str:
