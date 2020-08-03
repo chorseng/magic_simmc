@@ -11,7 +11,7 @@ from model import TextEncoder, ImageEncoder, ContextEncoder
 from model import ToHidden, TextDecoder, KVMemory
 
 
-def knowledge_attribute_valid(
+def knowledge_valid(
         context_text_encoder: TextEncoder,
         context_image_encoder: ImageEncoder,
         context_encoder: ContextEncoder,
