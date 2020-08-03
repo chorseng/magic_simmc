@@ -23,7 +23,7 @@ from model import TextDecoder, ToHidden, KVMemory
 from model import TextEncoder, ImageEncoder, ContextEncoder
 
 
-def knowledge_attribute_train(
+def knowledge_train(
         context_text_encoder: TextEncoder,
         context_image_encoder: ImageEncoder,
         context_encoder: ContextEncoder,
