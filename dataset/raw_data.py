@@ -444,7 +444,7 @@ class RawData():
         obj_id: Dict[str, int] = {'': 0}
         #obj_paths: List[str] = ['']
 
-        for product in objs.items():
+        for product in objs:
             obj_id[product] = len(obj_id)
             #obj_paths.append(img)
         return obj_id #, obj_paths
