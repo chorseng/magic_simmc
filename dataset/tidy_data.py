@@ -5,9 +5,6 @@ from typing import List, Dict
 
 from config import DatasetConfig
 from constant import INTENTION_TASK, TEXT_TASK, RECOMMEND_TASK, KNOWLEDGE_TASK
-from constant import KNOWLEDGE_ATTRIBUTE_SUBTASK
-from constant import KNOWLEDGE_CELEBRITY_SUBTASK
-from constant import KNOWLEDGE_STYLETIP_SUBTASK
 from constant import TRAIN_MODE, VALID_MODE, TEST_MODE
 from constant import USER_SPEAKER, SYS_SPEAKER
 from dataset import RawData
@@ -61,22 +58,14 @@ def generate_tidy_data_file(raw_data: RawData, task: int, mode: int):
         elif task == RECOMMEND_TASK:
             tidy_dialogs.extend(get_recommend_task_items(raw_data.image_paths,
                                                          dialog))
-        elif task == KNOWLEDGE_STYLETIP_SUBTASK:
-            items = get_knowledge_items(dialog, ordinal_number,
-                                        KNOWLEDGE_STYLETIP_SUBTASK)
-            tidy_dialogs.extend(items)
-        elif task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
+        elif task == KNOWLEDGE_TASK:
             items = get_knowledge_items(dialog, #ordinal_number,
-                                        KNOWLEDGE_ATTRIBUTE_SUBTASK)
-            tidy_dialogs.extend(items)
-        elif task == KNOWLEDGE_CELEBRITY_SUBTASK:
-            items = get_knowledge_items(dialog, ordinal_number,
-                                        KNOWLEDGE_CELEBRITY_SUBTASK)
+                                        KNOWLEDGE_TASK)
             tidy_dialogs.extend(items)
 
     # Save as pickle file.
-    #print('Not saving for now')
-    save_pkl(tidy_dialogs, 'tidy_dialogs', item_file_name)
+    print('Not saving for now')
+    #save_pkl(tidy_dialogs, 'tidy_dialogs', item_file_name)
 
 
 def standardized_dialog(dialog: Dialog) -> Dialog:
@@ -96,7 +85,7 @@ def standardized_dialog(dialog: Dialog) -> Dialog:
             std_dialog[-1].utter_type = utter.utter_type
             std_dialog[-1].text += utter.text
             std_dialog[-1].pos_images += utter.pos_images
-            std_dialog[-1].neg_images += utter.neg_images
+            #std_dialog[-1].neg_images += utter.neg_images
     return std_dialog
 
 
@@ -322,12 +311,13 @@ def get_knowledge_items(dialog: Dialog, #ordinal_number: Dict[int, int],
         List[TidyDialog]: Extracted tidy dialogs.
     """
     expected_utter_types = {}
-    if task == KNOWLEDGE_STYLETIP_SUBTASK:
-        expected_utter_types = DatasetConfig.utterance_knowledge_styletip_types
-    elif task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
-        expected_utter_types = DatasetConfig.utterance_knowledge_attribute_types
-    elif task == KNOWLEDGE_CELEBRITY_SUBTASK:
-        expected_utter_types = DatasetConfig.utterance_knowledge_celebrity_types
+    expected_utter_types = DatasetConfig.utterance_knowledge_attribute_types
+    #if task == KNOWLEDGE_STYLETIP_SUBTASK:
+    #    expected_utter_types = DatasetConfig.utterance_knowledge_styletip_types
+    #elif task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
+    #    expected_utter_types = DatasetConfig.utterance_knowledge_attribute_types
+    #elif task == KNOWLEDGE_CELEBRITY_SUBTASK:
+    #    expected_utter_types = DatasetConfig.utterance_knowledge_celebrity_types
 
     dialogs: List[TidyDialog] = []
     utterances = get_init_pad_utters()
