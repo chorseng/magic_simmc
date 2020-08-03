@@ -339,8 +339,7 @@ def get_knowledge_items(dialog: Dialog, #ordinal_number: Dict[int, int],
                 special_utter = Utterance(utter.speaker,
                                           utter.utter_type,
                                           text,
-                                          selected_products,
-                                          [])
+                                          selected_products)
                 special_utter = TidyUtterance(special_utter)
                 dialogs.append(copy.deepcopy(utterances + [special_utter]))
                 utter_type = None
