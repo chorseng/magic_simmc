@@ -432,7 +432,8 @@ class RawData():
         with open(DatasetConfig.fashion_meta, 'r') as file:
             #obj_pairs: List[List[str]] = [line.strip().split(' ')
             #                                    for line in file.readlines()]
-            objs: List[str] = list(file.keys())
+            fashion_dict = json.load(file)
+            objs: List[str] = list(fashion_dict.keys())
         #obj_pairs: List[Tuple[str, str]] = [(p[0], p[1])
         #                                          for p in obj_pairs]
         #url2img: Dict[str, str] = dict(obj_pairs)
