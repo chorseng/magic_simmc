@@ -100,7 +100,7 @@ def get_init_pad_utters() -> List[TidyUtterance]:
             speaker = SYS_SPEAKER
         else:
             speaker = USER_SPEAKER
-        utter = Utterance(speaker, -1, [], [], [])
+        utter = Utterance(speaker, -1, [], [])
         utters.append(TidyUtterance(utter))
     return utters
 
