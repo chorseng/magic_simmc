@@ -27,7 +27,7 @@ class DatasetConfig():
     # Can use if we download images
     image_data_directory = join(data_directory, 'images/')
 
-    dump_dir = '/home/chorseng/magic_simmc_dev/dump_dir'
+    dump_dir = '/home/chorseng/magic_simmc/dump_dir'
     common_raw_data_file = join(dump_dir, 'common_raw_data.pkl')
     knowledge_data_file = join(dump_dir, 'knowledge_data.pkl')
 
