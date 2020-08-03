@@ -22,7 +22,7 @@ class Utterance():
     """
 
     def __init__(self, speaker: int, utter_type: int, text: List[int],
-                 pos_images: List[int]:
+                 pos_images: List[int]):
         self.speaker: int = speaker
         self.utter_type: int = utter_type
         self.text: List[int] = text
