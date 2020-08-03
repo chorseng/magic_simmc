@@ -306,7 +306,7 @@ class RawData():
                     
                 for dial_idx in range(len(dialog_json['dialogue_data'])):
                   
-                    Print current progress.
+                    #Print current progress.
                     if (dial_idx + 1) % DIALOG_PROC_PRINT_FREQ == 0:
                         print('Processing dialog directory: {}/{}'.format(dial_idx + 1, len(dialog_json['dialogue_data']))
                   
