@@ -17,8 +17,7 @@ from config.model_config import ContextEncoderConfig
 from config.model_config import ContextImageEncoderConfig
 from config.model_config import ContextTextEncoderConfig
 from constant import (INTENTION_TASK, TEXT_TASK, RECOMMEND_TASK,
-                      KNOWLEDGE_STYLETIP_SUBTASK,
-                      KNOWLEDGE_ATTRIBUTE_SUBTASK, KNOWLEDGE_CELEBRITY_SUBTASK)
+                      KNOWLEDGE_TASK)
 from constant import TASK_STR, TASK_ID
 from constant import TRAIN_MODE, VALID_MODE, TEST_MODE
 from dataset import Dataset
@@ -26,8 +25,7 @@ from dataset.raw_data import CommonData
 from dataset.tidy_data import TidyDialog
 from dataset.knowledge_data import KnowledgeData
 from lib.train import intention_train, text_train, recommend_train
-from lib.train import (knowledge_styletip_train, knowledge_attribute_train,
-                       knowledge_celebrity_train)
+from lib.train import knowledge_train
 from model import TextEncoder, ImageEncoder, ContextEncoder
 from util import load_pkl, get_embed_init
 
