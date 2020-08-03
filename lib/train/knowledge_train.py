@@ -17,8 +17,8 @@ from dataset import Dataset
 from dataset.knowledge_data import AttributeData
 from lib import encode_context
 from lib.loss import text_loss
-from lib.test import knowledge_attribute_test
-from lib.valid import knowledge_attribute_valid
+from lib.test import knowledge_test
+from lib.valid import knowledge_valid
 from model import TextDecoder, ToHidden, KVMemory
 from model import TextEncoder, ImageEncoder, ContextEncoder
 
