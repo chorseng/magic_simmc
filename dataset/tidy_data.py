@@ -327,7 +327,7 @@ def get_knowledge_items(dialog: Dialog, #ordinal_number: Dict[int, int],
     products = []
     selected_products = []
     for utter in dialog:
-        pos_images = [image for image in utter.pos_images if image > 0]
+        pos_images = [image for image in utter.pos_images]
 
         if utter.speaker == USER_SPEAKER:
             utterances.append(TidyUtterance(utter))
