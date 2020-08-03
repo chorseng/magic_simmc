@@ -20,7 +20,7 @@ from util import load_pkl, save_pkl
 # Custom types.
 CommonData = namedtuple('CommonData',
                         ['dialog_vocab', 'glove',
-                         'obj_id', 'obj_paths'])
+                         'obj_id']) #, 'obj_paths'])
 Dialog = List[Utterance]
 
 
