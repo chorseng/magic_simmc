@@ -282,8 +282,8 @@ def get_recommend_task_items(
 
     return dialogs
 
-
-def get_products(order_words, text, products):
+# Don't need this
+def get_products(text, products):
     result = []
     if products:
         for word in text:
@@ -312,12 +312,6 @@ def get_knowledge_items(dialog: Dialog, #ordinal_number: Dict[int, int],
     """
     expected_utter_types = {}
     expected_utter_types = DatasetConfig.utterance_knowledge_attribute_types
-    #if task == KNOWLEDGE_STYLETIP_SUBTASK:
-    #    expected_utter_types = DatasetConfig.utterance_knowledge_styletip_types
-    #elif task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
-    #    expected_utter_types = DatasetConfig.utterance_knowledge_attribute_types
-    #elif task == KNOWLEDGE_CELEBRITY_SUBTASK:
-    #    expected_utter_types = DatasetConfig.utterance_knowledge_celebrity_types
 
     dialogs: List[TidyDialog] = []
     utterances = get_init_pad_utters()
@@ -331,17 +325,15 @@ def get_knowledge_items(dialog: Dialog, #ordinal_number: Dict[int, int],
 
         if utter.speaker == USER_SPEAKER:
             utterances.append(TidyUtterance(utter))
-            selected_products = get_products(ordinal_number, utter.text,
-                                             products)
+            selected_products = pos_images
             utter_type = utter.utter_type
         elif utter.speaker == SYS_SPEAKER:
-            desc = task == KNOWLEDGE_ATTRIBUTE_SUBTASK and has_shown and \
+            desc = task == KNOWLEDGE_TASK and has_shown and \
                    utter_type in DatasetConfig.utterance_recommend_types and \
                    len(utter.text) > 10
             if utter_type in expected_utter_types or desc:
                 if desc:
-                    selected_products = get_products(ordinal_number, utter.text,
-                                                     products)
+                    selected_products = pos_images
                 utterances = utterances[-context_size:]
                 text = copy.deepcopy(utter.text)
                 special_utter = Utterance(utter.speaker,
