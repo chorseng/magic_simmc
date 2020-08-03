@@ -56,7 +56,7 @@ def generate_tidy_data_file(raw_data: RawData, task: int, mode: int):
         elif task == TEXT_TASK:
             tidy_dialogs.extend(get_text_task_items(dialog))
         elif task == RECOMMEND_TASK:
-            tidy_dialogs.extend(get_recommend_task_items(raw_data.image_id,
+            tidy_dialogs.extend(get_recommend_task_items(raw_data.obj_id,
                                                          dialog))
         elif task == KNOWLEDGE_TASK:
             items = get_knowledge_items(dialog, #ordinal_number,
