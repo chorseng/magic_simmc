@@ -12,7 +12,7 @@ from config import KnowledgeAttributeTrainConfig, GlobalConfig
 from config.model_config import (MemoryConfig,
                                  AttributeKVMemoryConfig,
                                  KnowledgeTextDecoderConfig)
-from constant import KNOWLEDGE_ATTRIBUTE_SUBTASK
+from constant import KNOWLEDGE_TASK
 from dataset import Dataset
 from dataset.knowledge_data import AttributeData
 from lib import encode_context
