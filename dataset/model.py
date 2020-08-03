@@ -19,16 +19,14 @@ class Utterance():
         utter_type (int): Utterance type.
         text (str): Text.
         pos_images (List[int]): Positive images.
-        neg_images (List[int]): Negative images.
     """
 
     def __init__(self, speaker: int, utter_type: int, text: List[int],
-                 pos_images: List[int], neg_images: List[int]):
+                 pos_images: List[int]:
         self.speaker: int = speaker
         self.utter_type: int = utter_type
         self.text: List[int] = text
         self.pos_images: List[int] = pos_images
-        self.neg_images: List[int] = neg_images
 
     def __repr__(self):
         return str((self.speaker, self.utter_type, self.text,
@@ -55,8 +53,6 @@ class TidyUtterance():
         text_len (int): Text length.
         pos_images (List[int]): Positive images.
         pos_images_num (int): Number of positive images.
-        neg_images (List[int]): Negative images.
-        neg_images_num (int): Number of negative images.
     """
 
     def __init__(self, utter: Utterance):
@@ -65,11 +61,9 @@ class TidyUtterance():
             utter.text, DatasetConfig.dialog_text_max_len)
         self.pos_images, self.pos_images_num = pad_or_clip_images(
             utter.pos_images, DatasetConfig.pos_images_max_num)
-        self.neg_images, self.neg_images_num = pad_or_clip_images(
-            utter.neg_images, DatasetConfig.neg_images_max_num)
+
 
     def __repr__(self):
         return str((self.utter_type,
                     self.text, self.text_len,
-                    self.pos_images, self.pos_images_num,
-                    self.neg_images, self.neg_images_num))
+                    self.pos_images, self.pos_images_num))
