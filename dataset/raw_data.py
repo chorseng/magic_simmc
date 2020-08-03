@@ -60,7 +60,7 @@ class RawData():
         self.dialog_vocab: Dict[str, int] = None
         self.glove: List[Optional[List[float]]] = None
         self.obj_id: Dict[str, int] = None
-        self.obj_paths: List[str] = None
+        #self.obj_paths: List[str] = None
 
         # Dynamic attributes.
         if self.mode & TRAIN_MODE:
