@@ -30,7 +30,7 @@ class Utterance():
 
     def __repr__(self):
         return str((self.speaker, self.utter_type, self.text,
-                    self.pos_images, self.neg_images))
+                    self.pos_images))
 
 
 class Product():
