@@ -64,8 +64,7 @@ def train(task: int, model_file_name: str):
     valid_dialogs: List[TidyDialog] = load_pkl(valid_dialog_data_file)
     test_dialogs: List[TidyDialog] = load_pkl(test_dialog_data_file)
 
-    if task in {KNOWLEDGE_STYLETIP_SUBTASK, KNOWLEDGE_ATTRIBUTE_SUBTASK,
-                KNOWLEDGE_CELEBRITY_SUBTASK}:
+    if task in {KNOWLEDGE_TASK:
         knowledge_data = KnowledgeData()
 
     # Dataset wrap.
@@ -73,17 +72,17 @@ def train(task: int, model_file_name: str):
         task, common_data.dialog_vocab,
         common_data.image_paths,
         train_dialogs,
-        knowledge_data if task == KNOWLEDGE_ATTRIBUTE_SUBTASK else None)
+        knowledge_data if task == KNOWLEDGE_TASK else None)
     valid_dataset = Dataset(
         task, common_data.dialog_vocab,
         common_data.image_paths,
         valid_dialogs,
-        knowledge_data if task == KNOWLEDGE_ATTRIBUTE_SUBTASK else None)
+        knowledge_data if task == KNOWLEDGE_TASK else None)
     test_dataset = Dataset(
         task, common_data.dialog_vocab,
         common_data.image_paths,
         test_dialogs,
-        knowledge_data if task == KNOWLEDGE_ATTRIBUTE_SUBTASK else None)
+        knowledge_data if task == KNOWLEDGE_TASK else None)
 
     print('Train dataset size:', len(train_dataset))
     print('Valid dataset size:', len(valid_dataset))
@@ -153,20 +152,7 @@ def train(task: int, model_file_name: str):
             vocab_size,
             embed_init
         )
-    elif task == KNOWLEDGE_STYLETIP_SUBTASK:
-        knowledge_styletip_train(
-            context_text_encoder,
-            context_image_encoder,
-            context_encoder,
-            train_dataset,
-            valid_dataset,
-            test_dataset,
-            model_file,
-            knowledge_data.styletips_data,
-            common_data.dialog_vocab,
-            embed_init
-        )
-    elif task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
+    elif task == KNOWLEDGE_TASK:
         knowledge_attribute_train(
             context_text_encoder,
             context_image_encoder,
@@ -179,19 +165,7 @@ def train(task: int, model_file_name: str):
             common_data.dialog_vocab,
             embed_init
         )
-    elif task == KNOWLEDGE_CELEBRITY_SUBTASK:
-        knowledge_celebrity_train(
-            context_text_encoder,
-            context_image_encoder,
-            context_encoder,
-            train_dataset,
-            valid_dataset,
-            test_dataset,
-            model_file,
-            knowledge_data.celebrity_data,
-            common_data.dialog_vocab,
-            embed_init
-        )
+
 
 
 def parse_cmd() -> Dict[str, List[str]]:
