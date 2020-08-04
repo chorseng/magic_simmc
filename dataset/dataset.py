@@ -28,7 +28,7 @@ class Dataset(data.Dataset):
 
     def __init__(self, task: int,
                  dialog_vocab: Dict[str, int],
-                 image_paths: List[str] = None,
+                 image_paths: List[str],
                  dialogs: List[TidyDialog],
                  knowledge_data: KnowledgeData = None):
         self.task: int = task
