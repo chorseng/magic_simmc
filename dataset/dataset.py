@@ -83,9 +83,7 @@ class Dataset(data.Dataset):
 
         dialog: TidyDialog = self.dialogs[index % len(self.dialogs)]
         if self.task in {INTENTION_TASK,
-                         TEXT_TASK,
-                         KNOWLEDGE_STYLETIP_SUBTASK,
-                         KNOWLEDGE_CELEBRITY_SUBTASK}:
+                         TEXT_TASK}:
             return self._get_context_dialog(dialog)
         elif self.task == RECOMMEND_TASK:
             context_dialog = self._get_context_dialog(dialog)
@@ -96,7 +94,7 @@ class Dataset(data.Dataset):
             neg_products = self._get_images_product_texts(
                 utter.neg_images, DatasetConfig.neg_images_max_num)
             return context_dialog, pos_products, neg_products
-        elif self.task == KNOWLEDGE_ATTRIBUTE_SUBTASK:
+        elif self.task == KNOWLEDGE_TASK:
             context_dialog = self._get_context_dialog(dialog)
             attributes = self.get_attributes(dialog[-1].pos_images[0])
             return context_dialog, attributes
