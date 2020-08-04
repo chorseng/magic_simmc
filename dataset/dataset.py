@@ -126,7 +126,7 @@ class Dataset(data.Dataset):
         # Image.
         image_list = [[] for _ in range(DatasetConfig.dialog_context_size + 1)]
 
-        if self.image_paths = None:
+        if self.image_paths == None:
             print("No images")
             image_list.append(Dataset.EMPTY_IMAGE)
         else:
