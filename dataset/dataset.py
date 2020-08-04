@@ -122,29 +122,29 @@ class Dataset(data.Dataset):
         # (dialog_context_size + 1, dialog_text_max_len)
         text_lengths = torch.tensor(text_length_list)
         # (dialog_context_size + 1, )
+        
+        
 
         # Image.
         image_list = [[] for _ in range(DatasetConfig.dialog_context_size + 1)]
-        if self.image_paths == None:
-            print("No images")
-            image_list.append(Dataset.EMPTY_IMAGE)
-        else:
-            for idx, utter in enumerate(dialog):
-                for img_id in utter.pos_images:
-                    path = self.image_paths[img_id]
-                    if path:
-                        path = join(DatasetConfig.image_data_directory, path)
-                    else:
-                        path = ''
-                    if path and isfile(path):
-                        try:
-                            raw_image = Image.open(path).convert("RGB")
-                            image = DatasetConfig.transform(raw_image)
-                            image_list[idx].append(image)
-                        except OSError:
-                            image_list[idx].append(Dataset.EMPTY_IMAGE)
-                    else:
-                        image_list[idx].append(Dataset.EMPTY_IMAGE)
+        image_list.append(Dataset.EMPTY_IMAGE)
+        
+        #for idx, utter in enumerate(dialog):
+        #    for img_id in utter.pos_images:
+        #        path = self.image_paths[img_id]
+        #        if path:
+        #            path = join(DatasetConfig.image_data_directory, path)
+        #        else:
+        #            path = ''
+        #        if path and isfile(path):
+        #            try:
+        #                raw_image = Image.open(path).convert("RGB")
+        #                image = DatasetConfig.transform(raw_image)
+        #                image_list[idx].append(image)
+        #            except OSError:
+        #                image_list[idx].append(Dataset.EMPTY_IMAGE)
+        #        else:
+        #            image_list[idx].append(Dataset.EMPTY_IMAGE)
 
         images = torch.stack(list(map(torch.stack, image_list)))
         # (dialog_context_size + 1, pos_images_max_num,
