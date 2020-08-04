@@ -62,7 +62,7 @@ def encode_context(context_text_encoder: TextEncoder,
               
             # (batch_size, text_feat_size + image_feat_size)
             else:
-                mm = torch.cat((encoded_text), 1)  
+                mm = encoded_text #torch.cat((encoded_text), 1)  
             mm = mm.to(GlobalConfig.device) 
             context.append(mm)
 
