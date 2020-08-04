@@ -128,7 +128,7 @@ class Dataset(data.Dataset):
 
         for idx, utter in enumerate(dialog):
             for img_id in utter.pos_images:
-                path = self.obj_id[img_id]
+                path = self.image_path[img_id]
                 if path:
                     path = join(DatasetConfig.image_data_directory, path)
                 else:
