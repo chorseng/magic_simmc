@@ -64,7 +64,7 @@ def train(task: int, model_file_name: str):
     valid_dialogs: List[TidyDialog] = load_pkl(valid_dialog_data_file)
     test_dialogs: List[TidyDialog] = load_pkl(test_dialog_data_file)
 
-    if task in {KNOWLEDGE_TASK:
+    if task in {KNOWLEDGE_TASK}:
         knowledge_data = KnowledgeData()
 
     # Dataset wrap.
