@@ -111,7 +111,8 @@ def text_train(
 
             texts = texts.to(GlobalConfig.device)
             text_lengths = text_lengths.to(GlobalConfig.device)
-            images = images.to(GlobalConfig.device)
+            if images:
+                images = images.to(GlobalConfig.device)
             # utter_types = utter_types.to(GlobalConfig.device)
 
             texts.transpose_(0, 1)
