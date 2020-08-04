@@ -120,9 +120,9 @@ def text_train(
 
             text_lengths.transpose_(0, 1)
             # (dialog_context_size + 1, batch_size)
-
-            images.transpose_(0, 1)
-            images.transpose_(1, 2)
+            if images:
+                images.transpose_(0, 1)
+                images.transpose_(1, 2)
             # (dialog_context_size + 1, pos_images_max_num, batch_size, 3,
             #  image_size, image_size)
 
