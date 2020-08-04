@@ -48,19 +48,22 @@ def encode_context(context_text_encoder: TextEncoder,
 
         for j in range(DatasetConfig.pos_images_max_num):
             if images:
-              image = images[i][j]
+                image = images[i][j]
             else:
-              image = 0
+                image = 0
             # (batch_size, 3, image_size, image_size)
 
-            encoded_image = context_image_encoder(image, encoded_text)
-            encoded_image = encoded_image.to(GlobalConfig.device)
+            if images:
+                encoded_image = context_image_encoder(image, encoded_text)
+                encoded_image = encoded_image.to(GlobalConfig.device)
             # (batch_size, )
 
-            mm = torch.cat((encoded_text, encoded_image), 1)
-            mm = mm.to(GlobalConfig.device)
+                mm = torch.cat((encoded_text, encoded_image), 1)
+              
             # (batch_size, text_feat_size + image_feat_size)
-
+            else:
+                mm = torch.cat((encoded_text), 1)  
+            mm = mm.to(GlobalConfig.device) 
             context.append(mm)
 
     context = torch.stack(context)
