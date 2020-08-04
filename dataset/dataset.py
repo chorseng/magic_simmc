@@ -149,7 +149,7 @@ class Dataset(data.Dataset):
         #images = torch.stack(list(map(torch.stack, image_list)))
         # (dialog_context_size + 1, pos_images_max_num,
         # 3, image_size, image_size)
-        images = None
+        images = []
 
         # Utterance type.
         utter_type = dialog[-2].utter_type
