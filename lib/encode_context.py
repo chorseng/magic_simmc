@@ -47,7 +47,10 @@ def encode_context(context_text_encoder: TextEncoder,
         # text_feat_size = hidden_size * num_layers * num_directions
 
         for j in range(DatasetConfig.pos_images_max_num):
-            image = images[i][j]
+            if images:
+              image = images[i][j]
+            else:
+              image = 0
             # (batch_size, 3, image_size, image_size)
 
             encoded_image = context_image_encoder(image, encoded_text)
