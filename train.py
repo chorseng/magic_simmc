@@ -70,17 +70,17 @@ def train(task: int, model_file_name: str):
     # Dataset wrap.
     train_dataset = Dataset(
         task, common_data.dialog_vocab,
-        common_data.obj_id,
+        None, #common_data.obj_id,
         train_dialogs,
         knowledge_data if task == KNOWLEDGE_TASK else None)
     valid_dataset = Dataset(
         task, common_data.dialog_vocab,
-        common_data.obj_id,
+        None, #common_data.obj_id,
         valid_dialogs,
         knowledge_data if task == KNOWLEDGE_TASK else None)
     test_dataset = Dataset(
         task, common_data.dialog_vocab,
-        common_data.obj_id,
+        None, #common_data.obj_id,
         test_dialogs,
         knowledge_data if task == KNOWLEDGE_TASK else None)
 
