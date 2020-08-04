@@ -91,9 +91,9 @@ class Dataset(data.Dataset):
             utter = dialog[-1]  # System response.
             pos_products = self._get_images_product_texts(
                 utter.pos_images, DatasetConfig.pos_images_max_num)
-            neg_products = self._get_images_product_texts(
-                utter.neg_images, DatasetConfig.neg_images_max_num)
-            return context_dialog, pos_products, neg_products
+            #neg_products = self._get_images_product_texts(
+            #    utter.neg_images, DatasetConfig.neg_images_max_num)
+            return context_dialog, pos_products #, neg_products
         elif self.task == KNOWLEDGE_TASK:
             context_dialog = self._get_context_dialog(dialog)
             attributes = self.get_attributes(dialog[-1].pos_images[0])
@@ -125,7 +125,7 @@ class Dataset(data.Dataset):
 
         # Image.
         image_list = [[] for _ in range(DatasetConfig.dialog_context_size + 1)]
-
+        print('self.image_paths is ", self.image_paths)
         if self.image_paths == None:
             print("No images")
             image_list.append(Dataset.EMPTY_IMAGE)
